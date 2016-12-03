@@ -20,6 +20,14 @@ var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk
 
+var Cloudant = require('cloudant');
+
+var me = process.env.cloudant_username; // Set this to your own account
+var password = process.env.cloudant_password;
+
+// Initialize the library with my account.
+var cloudant = Cloudant({account:me, password:password});
+
 var app = express();
 
 // Bootstrap application settings
@@ -50,8 +58,34 @@ app.post('/api/message', function(req, res) {
   var payload = {
     workspace_id: workspace,
     context: req.body.context || {},
+    question: req.body.question || {},
     input: req.body.input || {}
   };
+
+  console.log(payload)
+
+  var doc = {
+    question: payload.question,
+    input: payload.input
+  }
+
+
+  // Store the input to the database
+// Specify the database we are going to use (alice)...
+  var sally = cloudant.db.use('sallychatbot');
+
+
+
+
+  // ...and insert a document in it.
+  sally.insert(doc, 'sallychatbot', function(err, body, header) {
+    if (err) {
+      return console.log('[sally.insert] ', err.message);
+    }
+
+    console.log('You have inserted the sally.');
+    console.log(body);
+  });
 
   // Send the input to the conversation service
   conversation.message(payload, function(err, data) {
@@ -60,7 +94,10 @@ app.post('/api/message', function(req, res) {
     }
     return res.json(updateMessage(payload, data));
   });
+
+
 });
+
 
 /**
  * Updates the response text using the intent confidence

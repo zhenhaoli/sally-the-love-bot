@@ -26,7 +26,7 @@ var ConversationPanel = (function() {
   // Initialize the module
   function init() {
     chatUpdateSetup();
-    Api.sendRequest( '', null );
+    Api.sendRequest( '', '', null );
     setupInputBox();
   }
   // Set up callbacks on payload setters in Api module
@@ -217,8 +217,10 @@ var ConversationPanel = (function() {
         context = latestResponse.context;
       }
 
+      //we need the question to know the key being stored into db
+      var question = $('.message-inner').last()[0].innerText;
       // Send the user message
-      Api.sendRequest(inputBox.value, context);
+      Api.sendRequest(inputBox.value, question, context);
 
       // Clear input box for further messages
       inputBox.value = '';
