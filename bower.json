@@ -1,0 +1,20 @@
+{
+  "name": "conversation-simple",
+  "description": "A simple Node.js based web app which shows how to use the Conversation API to recognize user intents.",
+  "main": "server.js",
+  "authors": [
+    "zhenhaoli <zhenhao.li@outlook.com>"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/watson-developer-cloud/conversation-simple",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}

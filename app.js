@@ -58,34 +58,16 @@ app.post('/api/message', function(req, res) {
   var payload = {
     workspace_id: workspace,
     context: req.body.context || {},
-    question: req.body.question || {},
+    question: req.body.question || {question: ''},
     input: req.body.input || {}
   };
 
-  console.log(payload)
-
   var doc = {
+    username: payload.context.user_name,
     question: payload.question,
     input: payload.input
-  }
+  };
 
-
-  // Store the input to the database
-// Specify the database we are going to use (alice)...
-  var sally = cloudant.db.use('sallychatbot');
-
-
-
-
-  // ...and insert a document in it.
-  sally.insert(doc, 'sallychatbot', function(err, body, header) {
-    if (err) {
-      return console.log('[sally.insert] ', err.message);
-    }
-
-    console.log('You have inserted the sally.');
-    console.log(body);
-  });
 
   // Send the input to the conversation service
   conversation.message(payload, function(err, data) {

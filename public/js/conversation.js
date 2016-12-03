@@ -162,6 +162,14 @@ var ConversationPanel = (function() {
     var messageArray = [];
 
     textArray.forEach(function(currentText) {
+      var hasLink = currentText.indexOf('https');
+      var linkEnd = currentText.indexOf('Seems');
+      if(hasLink !== -1){
+        console.log(hasLink);
+        console.log(linkEnd)
+       var link  = currentText.substring(hasLink, linkEnd);
+        currentText = currentText.replace(link, ': <a href="' + link + '">Personality Result</a><br><br>')
+      }
       if (currentText) {
         var messageJson = {
           // <div class='segments'>
